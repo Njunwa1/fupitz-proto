@@ -18,9 +18,6 @@ message Click {
   float longitude = 11;
 }
 
-message Clicks {
-  repeated Click clicks = 1;
-}
 
 message UrlClickRequest {
   string urlID = 1;
@@ -51,11 +48,12 @@ message UrlClickResponse {
 }
 
 service UrlClicks {
-  rpc CreateUrlClick(UrlClickRequest) returns (UrlClickResponse){
+  rpc Redirect(UrlClickRequest) returns (UrlClickResponse){
     option (google.api.http) = {
       get: "/api/v1/url/get/{shortUrl}"
     };
   }
+
 }
 
 
