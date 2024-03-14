@@ -84,48 +84,65 @@ func local_request_Url_GetUrlByKey_0(ctx context.Context, marshaler runtime.Mars
 }
 
 var (
-	filter_Url_GetAllUrlsForUser_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+	filter_Url_GetAllUserUrls_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 )
 
-func request_Url_GetAllUrlsForUser_0(ctx context.Context, marshaler runtime.Marshaler, client UrlClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Url_GetAllUserUrls_0(ctx context.Context, marshaler runtime.Marshaler, client UrlClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq UserUrlsRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Url_GetAllUrlsForUser_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Url_GetAllUserUrls_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := client.GetAllUrlsForUser(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.GetAllUserUrls(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_Url_GetAllUrlsForUser_0(ctx context.Context, marshaler runtime.Marshaler, server UrlServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Url_GetAllUserUrls_0(ctx context.Context, marshaler runtime.Marshaler, server UrlServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq UserUrlsRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Url_GetAllUrlsForUser_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Url_GetAllUserUrls_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := server.GetAllUrlsForUser(ctx, &protoReq)
+	msg, err := server.GetAllUserUrls(ctx, &protoReq)
 	return msg, metadata, err
 
 }
 
 var (
-	filter_Url_GetUserUrlWithClicks_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+	filter_Url_GetUserUrlWithClicks_0 = &utilities.DoubleArray{Encoding: map[string]int{"shortUrl": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
 func request_Url_GetUserUrlWithClicks_0(ctx context.Context, marshaler runtime.Marshaler, client UrlClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq UserUrlRequest
 	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["shortUrl"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "shortUrl")
+	}
+
+	protoReq.ShortUrl, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "shortUrl", err)
+	}
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
@@ -142,6 +159,23 @@ func request_Url_GetUserUrlWithClicks_0(ctx context.Context, marshaler runtime.M
 func local_request_Url_GetUserUrlWithClicks_0(ctx context.Context, marshaler runtime.Marshaler, server UrlServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq UserUrlRequest
 	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["shortUrl"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "shortUrl")
+	}
+
+	protoReq.ShortUrl, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "shortUrl", err)
+	}
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
@@ -211,7 +245,7 @@ func RegisterUrlHandlerServer(ctx context.Context, mux *runtime.ServeMux, server
 
 	})
 
-	mux.Handle("GET", pattern_Url_GetAllUrlsForUser_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Url_GetAllUserUrls_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
@@ -219,12 +253,12 @@ func RegisterUrlHandlerServer(ctx context.Context, mux *runtime.ServeMux, server
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/.Url/GetAllUrlsForUser", runtime.WithHTTPPathPattern("/api/v1/urls/all"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/.Url/GetAllUserUrls", runtime.WithHTTPPathPattern("/api/v1/urls/all"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_Url_GetAllUrlsForUser_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Url_GetAllUserUrls_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
@@ -232,7 +266,7 @@ func RegisterUrlHandlerServer(ctx context.Context, mux *runtime.ServeMux, server
 			return
 		}
 
-		forward_Url_GetAllUrlsForUser_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Url_GetAllUserUrls_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -244,7 +278,7 @@ func RegisterUrlHandlerServer(ctx context.Context, mux *runtime.ServeMux, server
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/.Url/GetUserUrlWithClicks", runtime.WithHTTPPathPattern("/api/v1/url/clicks"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/.Url/GetUserUrlWithClicks", runtime.WithHTTPPathPattern("/api/v1/url/{shortUrl}/clicks"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -346,25 +380,25 @@ func RegisterUrlHandlerClient(ctx context.Context, mux *runtime.ServeMux, client
 
 	})
 
-	mux.Handle("GET", pattern_Url_GetAllUrlsForUser_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Url_GetAllUserUrls_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/.Url/GetAllUrlsForUser", runtime.WithHTTPPathPattern("/api/v1/urls/all"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/.Url/GetAllUserUrls", runtime.WithHTTPPathPattern("/api/v1/urls/all"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_Url_GetAllUrlsForUser_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Url_GetAllUserUrls_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_Url_GetAllUrlsForUser_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Url_GetAllUserUrls_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -374,7 +408,7 @@ func RegisterUrlHandlerClient(ctx context.Context, mux *runtime.ServeMux, client
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/.Url/GetUserUrlWithClicks", runtime.WithHTTPPathPattern("/api/v1/url/clicks"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/.Url/GetUserUrlWithClicks", runtime.WithHTTPPathPattern("/api/v1/url/{shortUrl}/clicks"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -398,9 +432,9 @@ var (
 
 	pattern_Url_GetUrlByKey_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"Url", "GetUrlByKey"}, ""))
 
-	pattern_Url_GetAllUrlsForUser_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "urls", "all"}, ""))
+	pattern_Url_GetAllUserUrls_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "urls", "all"}, ""))
 
-	pattern_Url_GetUserUrlWithClicks_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "url", "clicks"}, ""))
+	pattern_Url_GetUserUrlWithClicks_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"api", "v1", "url", "shortUrl", "clicks"}, ""))
 )
 
 var (
@@ -408,7 +442,7 @@ var (
 
 	forward_Url_GetUrlByKey_0 = runtime.ForwardResponseMessage
 
-	forward_Url_GetAllUrlsForUser_0 = runtime.ForwardResponseMessage
+	forward_Url_GetAllUserUrls_0 = runtime.ForwardResponseMessage
 
 	forward_Url_GetUserUrlWithClicks_0 = runtime.ForwardResponseMessage
 )
