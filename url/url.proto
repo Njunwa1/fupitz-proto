@@ -39,10 +39,6 @@ message UserUrlsRequest {
   string userId = 1;
 }
 
-message UserUrlRequest {
-  string userId = 1;
-  string shortUrl = 2;
-}
 
 message UrlClick {
   string id = 1;
@@ -56,48 +52,6 @@ message UrlClick {
   string referrer = 9;
   string createdAt = 10;
 }
-
-message UrlClicksByBrowser {
-  string browser = 1;
-  int64 totalClicks = 2;
-}
-
-message UrlClicksByCountry {
-  string country = 1;
-  int64 totalClicks = 2;
-}
-
-message UrlClicksByDevice {
-  string device = 1;
-  int64 totalClicks = 2;
-
-}
-
-message UrlClicksByOS {
-  string os = 1;
-  int64 totalClicks = 2;
-}
-
-
-message UrlClicksByReferrer {
-  string referrer = 1;
-  int64 totalClicks = 2;
-}
-
-message AggregationResult {
-  string date = 1;
-  int64 totalClicks = 2;
-  repeated UrlClicksByOS urlClicksByOS = 3;
-  repeated UrlClicksByBrowser urlClicksByBrowser = 4;
-  repeated UrlClicksByDevice urlClicksByDevice = 5;
-  repeated UrlClicksByCountry urlClicksByCountry = 6;
-}
-
-message UrlClicksAggregates{
-  UrlResponse urlResponse = 1;
-  repeated AggregationResult results = 2;
-}
-
 
 message UserUrlsResponse {
   repeated UrlResponse urls = 1;
@@ -120,10 +74,5 @@ service Url {
     };
   }
 
-  rpc GetUserUrlWithClicks(UserUrlRequest) returns (UrlClicksAggregates){
-       option (google.api.http) = {
-         get: "/api/v1/url/{shortUrl}/clicks"
-      };
-    }
 }
 
