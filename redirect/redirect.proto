@@ -8,6 +8,7 @@ import "google/api/annotations.proto";
 
 message RedirectRequest {
   string shortUrl = 1;
+  string urlID = 2;
 }
 
 
