@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+option go_package = "github.com/Njunwa1/fupi.tz/qrcode/proto/qrcode";
+
+import "google/api/annotations.proto";
+
+message CreateQRCodeRequest{
+  string destinationUrl = 1;
+  string shortUrl = 2;
+  string backgroundColor = 3;
+  string foregroundColor = 4;
+  string logoUrl = 5;
+  string frameColor = 6;
+  string frameText = 7;
+  bool branded = 8;
+}
+
+message UpdateQRCodeRequest{
+  string destinationUrl = 1;
+  string shortUrl = 2;
+  string backgroundColor = 3;
+  string foregroundColor = 4;
+  string logoUrl = 5;
+  string frameColor = 6;
+  string frameText = 7;
+  bool branded = 8;
+  string id = 9;
+}
+
+message GetQRCodeRequest{
+    string id = 1;
+}
+
+message QRCodeResponse{
+    string destinationUrl = 1;
+    string shortUrl = 2;
+    string backgroundColor = 3;
+    string foregroundColor = 4;
+    string logoPath = 5;
+    string frameColor = 6;
+    string frameText = 7;
+    bool branded = 8;
+    string qrcodeUrl = 9;
+    string id = 10;
+}
+
+message QRCodesResponse{
+    repeated QRCodeResponse qrCodes = 1;
+}
+
+message QRCodesRequest{
+    string userId = 1;
+}
+
+message QRCodeLogoRequest{
+    string userId = 1;
+    bytes chunkData = 2;
+}
+
+message QRCodeLogoResponse{
+  string logoUrl = 1;
+  string logoPath = 2;
+}
+
+service QRCode{
+    rpc GetQRCodes(QRCodesRequest) returns (QRCodesResponse){
+        option (google.api.http) = {
+            get: "/v1/qrcode/all"
+        };
+    }
+
+    rpc GenerateQRCode(CreateQRCodeRequest) returns (QRCodeResponse){
+        option (google.api.http) = {
+            post: "/v1/qrcode/generate"
+            body: "*"
+        };
+    }
+
+    rpc GetQRCode(GetQRCodeRequest) returns (QRCodeResponse){
+        option (google.api.http) = {
+            get: "/v1/qrcode/{id}"
+        };
+    }
+
+    rpc UpdateQRCode(UpdateQRCodeRequest) returns (QRCodeResponse){
+        option (google.api.http) = {
+            put: "/v1/qrcode/{id}/update"
+            body: "*"
+        };
+    }
+
+    rpc uploadQRCodeLogo(stream QRCodeLogoRequest) returns (QRCodeLogoResponse){
+        option (google.api.http) = {
+            post: "/v1/qrcode/logo"
+            body: "*"
+        };
+    }
+}
