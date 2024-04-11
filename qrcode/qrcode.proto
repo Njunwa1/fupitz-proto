@@ -9,10 +9,11 @@ message CreateQRCodeRequest{
   string shortUrl = 2;
   string backgroundColor = 3;
   string foregroundColor = 4;
-  string logoUrl = 5;
+  string logoPath = 5;
   string frameColor = 6;
   string frameText = 7;
   bool branded = 8;
+  string userId = 9;
 }
 
 message UpdateQRCodeRequest{
@@ -25,6 +26,7 @@ message UpdateQRCodeRequest{
   string frameText = 7;
   bool branded = 8;
   string id = 9;
+  string userId = 10;
 }
 
 message GetQRCodeRequest{
